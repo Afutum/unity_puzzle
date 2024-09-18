@@ -12,7 +12,7 @@ public class GameDirector : MonoBehaviour
     // アイテムのプレハブ
     [SerializeField] List<GameObject> prefabBubbles;
     // ゲーム時間
-    [SerializeField] float gameTimer;
+    [SerializeField] public float gameTimer;
     // フィールドのアイテム総数
     [SerializeField] int fieldItemCountMax;
     // 削除できるアイテム数
@@ -20,18 +20,9 @@ public class GameDirector : MonoBehaviour
     // コンボカウント
     [SerializeField] int comboCount;
 
-    // UI
-    //[SerializeField] TextMeshProUGUI textGameScore;
-    [SerializeField] TextMeshProUGUI textGameTimer;
-    [SerializeField] TextMeshProUGUI textComboCounter;
-    [SerializeField] TextMeshProUGUI combo;
-    [SerializeField] TextMeshProUGUI power;
-    [SerializeField] TextMeshProUGUI clear;
-    //[SerializeField] GameObject gameResult;
-    [SerializeField] GameObject attackButton;
-
-    Enemy enemy;
-    GameObject obj;
+    EnemyManager enemy;
+    UIManager uiManager;
+    PlayerManager player;
 
     // フィールド上のアイテム
     List<GameObject> bubbles;
@@ -46,27 +37,44 @@ public class GameDirector : MonoBehaviour
 
     // プレイヤー・敵のターンかどうか
     public bool isPlayerTurn;
-    public bool isEnemyTurn;
+    public bool IsPlayerTurn { get { return isPlayerTurn; } }
+
+    bool isEnemyTurn;
+    public bool IsEnemyTurn { get { return isEnemyTurn; } }
+    // attackボタンを押したかどうか
+    bool isAttackBtn;
     // 終了したかどうか
     public bool isEnd;
-    // 経過ターン
-    public int turn = 0;
-    // プレイヤーのHP
-    public int playerHp = 500;
+    public bool IsEnd { get { return isEnd; } }
+    // 経過ラウンド
+    int roundCnt = 0;
+    public int RoundCnt { get { return roundCnt; } }
     // 攻撃力
     int powerNum = 0;
-    // 消した回数
+    public int PowerNum { get { return powerNum; } }
+    // 攻撃中かどうか
     bool isDelete = false;
+    public bool IsDelete { get { return isDelete; } }
+
+    public float GameTimer { get { return gameTimer; } }
+
+    int hideRoundCnt = 0;
+
+    GameObject bubble;
 
     // Start is called before the first frame update
     void Start()
     {
         // Enemyスクリプトの取得
-        obj = GameObject.Find("Enemy");
-        enemy = obj.GetComponent<Enemy>();
+        enemy = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+
+        // UIManagerスクリプトの取得
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+
+        player = GameObject.Find("player").GetComponent<PlayerManager>();
 
         // Audio
-        audioSource = GetComponent<AudioSource>();
+        //audioSource = GetComponent<AudioSource>();
 
         // 全アイテム
         bubbles = new List<GameObject>();
@@ -79,20 +87,15 @@ public class GameDirector : MonoBehaviour
         // リザルト画面非表示
         //gameResult.SetActive(false);
 
-        // テキストを表示
-        power.enabled = false;
-        clear.enabled = false;
-
-        isPlayerTurn = true;
-        isEnemyTurn = false;
+        isPlayerTurn = false;
+        isEnemyTurn = true;
 
         isEnd = false;
 
-        // 攻撃ボタンを非表示
-        attackButton.SetActive(false);
-
         // アイテム生成
         SpawnItem(fieldItemCountMax);
+
+        ChangTurn();
     }
 
     // Update is called once per frame
@@ -101,160 +104,226 @@ public class GameDirector : MonoBehaviour
         // isEndがtrueのとき
         if (isEnd)
         {
-            // リザルト画面表示
-            //gameResult.SetActive(true);
-
-            // クリアテキストを表示
-            clear.enabled = true;
             Debug.Log("くりあ");
-
-            // Updateに入らないようにする
-            enabled = false;
 
             // この時点でUpdateから抜ける
             return;
         }
-        else if (isEnemyTurn == false)
+        else if (isPlayerTurn == true)
         {// isEndがfalse・敵のターンじゃないとき
 
-            // ゲームタイマー更新処理
-            gameTimer -= Time.deltaTime;
-            textGameTimer.text = "" + (int)gameTimer;
-
-            // ゲーム終了
-            if (0 > gameTimer)
+            if (hideRoundCnt == 0)
             {
-                // 敵の体力を減らす
-                enemy.hp -= powerNum;
-                Debug.Log("敵のHP：" + enemy.hp);
+                uiManager.RoundUpText(roundCnt);
+                hideRoundCnt++;
+            }
 
-                textGameTimer.text = "" + 0;
+            // 操作時間更新処理
+            gameTimer -= Time.deltaTime;
 
-                isDelete = false;
-
-                isEnemyTurn = true;
-
-                enemy.Attack(isEnemyTurn);
-
-                // ターン数を加算
-                turn++;
-
-                // ターン数が2以下だったら
-                if (turn <= 2)
+            // 操作時間終了もしくは攻撃ボタンを押された場合
+            if (gameTimer < 0 || isAttackBtn == true)
+            {
+                if (player.Power > 0)
                 {
-                    // タイマーを戻す
-                    gameTimer = 30;
-                    textGameTimer.text = "" + (int)gameTimer;
+                    if (player.CompleteAction == null)
+                    {
+                        player.Attack();
 
-                    // 攻撃力の数値を元に戻す
-                    powerNum = 0;
-                    power.text = "" + 0;
+                        player.PushButtonAnim(() =>
+                        {
+                            // 攻撃を終わらせる
+                            isDelete = false;
 
-                    // ダメージ数を非表示
-                    power.enabled = false;
-                    // 攻撃ボタンを非表示
-                    attackButton.SetActive(false);
+                            // ラウンド数が2以下だったら
+                            if (roundCnt < enemy.Enemy.Length)
+                            {
+                                // タイマーを戻す
+                                gameTimer = 30;
+
+                                // 攻撃力の数値を元に戻す
+                                player.ResetPower();
+
+                                if (enemy.Hp[roundCnt] > 0)
+                                {
+                                    ChangTurn();
+                                }
+                                else
+                                {
+                                    isAttackBtn = true;
+                                }
+                            }
+                            else
+                            {
+                                // リザルト画面表示
+                                //gameResult.SetActive(true);
+
+                                GameEnd();
+
+                                // Updateに入らないようにする
+                                enabled = false;
+
+                                // この時点でUpdateから抜ける
+                                return;
+                            }
+                        });
+                    }
                 }
                 else
                 {
-                    textGameTimer.text = "" + 0;
+                    // 攻撃を終わらせる
+                    isDelete = false;
 
-                    // リザルト画面表示
-                    //gameResult.SetActive(true);
+                    // ラウンド数が2以下だったら
+                    if (roundCnt <= enemy.Enemy.Length)
+                    {
+                        if (enemy.Hp[0] > 0)
+                        {
+                            ChangTurn();
+                        }
 
-                    // Updateに入らないようにする
-                    enabled = false;
+                        // タイマーを戻す
+                        gameTimer = 30;
 
-                    // この時点でUpdateから抜ける
-                    return;
+                        // 攻撃力の数値を元に戻す
+                        player.ResetPower();
+                    }
+                    else
+                    {
+                        // リザルト画面表示
+                        //gameResult.SetActive(true);
+
+                        GameEnd();
+
+                        // Updateに入らないようにする
+                        enabled = false;
+
+                        // この時点でUpdateから抜ける
+                        return;
+                    }
                 }
             }
-        }
-        else
-        {
-            return;
-        }
 
-        // タッチ開始
-        if (Input.GetMouseButtonDown(0))
-        {
-            GameObject hitBubble = GetHitBubble();
-
-            // 下準備
-            lineBubbles.Clear();
-
-            // 当たり判定
-            if (hitBubble)
+            // タッチ開始
+            if (Input.GetMouseButtonDown(0))
             {
-                lineBubbles.Add(hitBubble);
-            }
-        }
-        // おしっぱなし
-        else if (Input.GetMouseButton(0))
-        {
-            GameObject hitBubble = GetHitBubble();
+                GameObject hitBubble = GetHitBubble();
 
-            // 当たり判定あり
-            if (hitBubble && lineBubbles.Count > 0)
-            {
-                // 距離
-                GameObject pre = lineBubbles[lineBubbles.Count - 1];
-                float distans =
-                    Vector2.Distance(hitBubble.transform.position, pre.transform.position);
+                // 下準備
+                lineBubbles.Clear();
 
-                // カラー
-                bool isSameColor =
-                    hitBubble.GetComponent<SpriteRenderer>().sprite == pre.GetComponent<SpriteRenderer>().sprite;
-
-                if (isSameColor && distans <= 1.5f && !lineBubbles.Contains(hitBubble))
+                // 当たり判定
+                if (hitBubble)
                 {
-                    // ライン追加
                     lineBubbles.Add(hitBubble);
                 }
             }
-        }
-        // タッチ終了
-        else if (Input.GetMouseButtonUp(0))
-        {
-            // 削除されたアイテムをクリア
-            bubbles.RemoveAll(item => item == null);
-
-            // アイテム削除
-            DeleteItems(lineBubbles);
-
-            // ラインをクリア
-            lineRenderer.positionCount = 0;
-            lineBubbles.Clear();
-        }
-
-        // ライン描画処理
-        if (lineBubbles.Count > 1)
-        {
-            // 頂点数
-            lineRenderer.positionCount = lineBubbles.Count;
-            // ラインのポジション
-            for (int i = 0; i < lineBubbles.Count; i++)
+            // おしっぱなし
+            else if (Input.GetMouseButton(0))
             {
-                lineRenderer.SetPosition(i, lineBubbles[i].transform.position);
+                GameObject hitBubble = GetHitBubble();
+
+                // 当たり判定あり
+                if (hitBubble && lineBubbles.Count > 0)
+                {
+                    // 距離
+                    GameObject pre = lineBubbles[lineBubbles.Count - 1];
+                    float distans =
+                        Vector2.Distance(hitBubble.transform.position, pre.transform.position);
+
+                    // カラー
+                    bool isSameColor =
+                        hitBubble.GetComponent<SpriteRenderer>().sprite == pre.GetComponent<SpriteRenderer>().sprite;
+
+                    if (isSameColor && distans <= 1.5f && !lineBubbles.Contains(hitBubble))
+                    {
+                        // ライン追加
+                        lineBubbles.Add(hitBubble);
+                    }
+                }
             }
-        }
+            // タッチ終了
+            else if (Input.GetMouseButtonUp(0))
+            {
+                // 削除されたアイテムをクリア
+                bubbles.RemoveAll(item => item == null);
 
-        /*
-         // タッチ処理
-         if(Input.GetMouseButtonUp(0))
-         {
-             GameObject hitBubble = GetHitBubble();
+                // アイテム削除
+                DeleteItems(lineBubbles);
 
-             // 削除されたアイテムをクリア
-             bubbles.RemoveAll(item => item == null);
+                // ラインをクリア
+                lineRenderer.positionCount = 0;
+                lineBubbles.Clear();
+            }
 
-             // 何か当たり判定があれば
-             if (hitBubble)
+            // ライン描画処理
+            if (lineBubbles.Count > 1)
+            {
+                // 頂点数
+                lineRenderer.positionCount = lineBubbles.Count;
+                // ラインのポジション
+                for (int i = 0; i < lineBubbles.Count; i++)
+                {
+                    lineRenderer.SetPosition(i, lineBubbles[i].transform.position);
+                }
+            }
+
+            /*
+             // タッチ処理
+             if(Input.GetMouseButtonUp(0))
              {
-                 CheckItems(hitBubble);
+                 GameObject hitBubble = GetHitBubble();
+
+                 // 削除されたアイテムをクリア
+                 bubbles.RemoveAll(item => item == null);
+
+                 // 何か当たり判定があれば
+                 if (hitBubble)
+                 {
+                     CheckItems(hitBubble);
+                 }
              }
-         }
-        */
+            */
+        }
+        else
+        {
+            // 敵の状態が攻撃完了なら
+            if (enemy.EnemyCurrentStatus == EnemyManager.EnemyStatus.AttackComplete)
+            {
+                // ターンを変更
+                ChangTurn();
+
+                // 敵の状態をなしにする
+                enemy.EnemyCurrentStatus = EnemyManager.EnemyStatus.None;
+            }
+            // 敵の状態がなにもないなら
+            else if (enemy.EnemyCurrentStatus == EnemyManager.EnemyStatus.None)
+            {
+
+                Debug.Log(isEnemyTurn);
+                // 敵の攻撃を開始
+                StartCoroutine(enemy.Attack(isEnemyTurn));
+            }
+            /*else if(enemy.IsEnemyChange == true)
+            {
+                enemy.ResetEnemyChange();
+
+                // 敵の状態をなしにする
+                enemy.EnemyCurrentStatus = EnemyManager.EnemyStatus.None;
+
+                isPlayerTurn = true;
+                isEnemyTurn = false;
+            }*/
+        }
+    }
+
+    // シーンのロードを遅らせる
+    private IEnumerator waitAndLoadScene()
+    {
+        yield return new WaitForSeconds(1);
+
+        // リザルト画面
+        SceneManager.LoadScene("Result");
     }
 
     // アイテム生成
@@ -269,7 +338,7 @@ public class GameDirector : MonoBehaviour
             float y = Random.Range(-2.0f, 2.0f);
 
             // アイテム生成
-            GameObject bubble =
+            bubble =
                 Instantiate(prefabBubbles[rnd], new Vector3(x, 3 + y, 0), Quaternion.identity);
 
             // 内部データ追加
@@ -282,8 +351,6 @@ public class GameDirector : MonoBehaviour
     {
         // 削除可能数に達していなかったらなにもしない
         if (checkItems.Count < deleteCount) return;
-
-        Debug.Log(checkItems.Count);
 
         // 削除してスコア加算
         List<GameObject> destroyItems = new List<GameObject>();
@@ -303,19 +370,13 @@ public class GameDirector : MonoBehaviour
         SpawnItem(destroyItems.Count);
         gameScore += destroyItems.Count * 100;
 
-        // ダメージ数を表示
-        power.enabled = true;
-
         // 攻撃力に繋げた長さ * 30を加算
-        powerNum += checkItems.Count * 40;
-        power.text = "" + (int)powerNum;
+        //powerNum += checkItems.Count * 40;
 
+        player.AttackPower(checkItems.Count * 40);
+
+        // 攻撃中に変更
         isDelete = true;
-
-        if(isDelete)
-        {
-            attackButton.SetActive(true);
-        }
 
         // スコア表示更新
         //textGameScore.text = "" + gameScore;
@@ -418,5 +479,71 @@ public class GameDirector : MonoBehaviour
     {
         // ターンを終了
         gameTimer = 0;
+    }
+
+    // ゲーム終了
+    public void GameEnd()
+    {
+        isEnd = true;
+
+        StartCoroutine(waitAndLoadScene());
+    }
+
+    // 攻撃終了
+    public void EndAttack()
+    {
+        // 攻撃を終わらせる
+        isDelete = false;
+        // Attackボタン表示されているか
+        isAttackBtn = true;
+    }
+
+    // ラウンドカウント
+    public void CountRound()
+    {
+        roundCnt++;
+
+        if (isEnd == false)
+        {
+            uiManager.RoundUpText(roundCnt);
+        }
+    }
+
+    // 攻守ターンの変更
+    public void ChangTurn()
+    {
+        gameTimer = 30;
+
+        if (isPlayerTurn)
+        {
+            isPlayerTurn = false;
+            isEnemyTurn = true;
+        }
+        else
+        {
+            isPlayerTurn = true;
+            isEnemyTurn = false;
+        }
+
+        StartCoroutine(uiManager.ChangeText());
+    }
+
+    public IEnumerator WaitChangeTurn()
+    {
+        yield return new WaitForSeconds(3);
+
+        ChangTurn();
+    }
+
+    // ボタンの表示・非表示
+    public void DisplayAttackBtn(bool isAttack)
+    {
+        isAttackBtn = isAttack;
+    }
+
+    // ボタン押した判定をリセット
+    public void ResetAttackButton()
+    {
+        isAttackBtn = false;
     }
 }

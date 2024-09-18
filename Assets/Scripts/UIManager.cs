@@ -1,0 +1,209 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UIManager : MonoBehaviour
+{
+    // UI
+    //[SerializeField] TextMeshProUGUI textGameScore;
+    [SerializeField] TextMeshProUGUI textGameTimer;
+    [SerializeField] TextMeshProUGUI textComboCounter;
+    [SerializeField] TextMeshProUGUI combo;
+    [SerializeField] TextMeshProUGUI power;
+    [SerializeField] TextMeshProUGUI clear;
+    [SerializeField] GameObject attackButton;
+    [SerializeField] GameObject playerTurnText;
+    [SerializeField] GameObject enemyTurnText;
+    [SerializeField] GameObject roundText;
+    [SerializeField] Text roundUpText;
+
+    GameDirector gameDirector;
+    EnemyManager enemyManager;
+    PlayerManager player;
+
+    GameObject lastEnemy;
+
+    public void Awake()
+    {
+        playerTurnText.SetActive(false);
+        enemyTurnText.SetActive(true);
+
+        // GameDirectorの取得
+        gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // テキストを表示
+        power.enabled = false;
+        clear.enabled = false;
+
+        // 攻撃ボタンを非表示
+        attackButton.SetActive(false);
+
+        roundText.SetActive(false);
+
+        // EnemyManagerの取得
+        enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+        // PlayerManagerの取得
+        player = GameObject.Find("player").GetComponent<PlayerManager>();
+
+        lastEnemy = enemyManager.Enemy.Last();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (gameDirector.IsDelete)
+        {// 攻撃中なら
+            // ダメージ数を表示
+            power.enabled = true;
+            power.text = "" + (int)player.Power;
+            // アタックボタンを表示
+            attackButton.SetActive(true);
+        }
+
+        if (gameDirector.IsEnd)
+        {// ゲームが終了していたら
+            // クリアテキストを表示
+            clear.enabled = true;
+        }
+        else if (gameDirector.IsEnemyTurn == false)
+        {
+            //StartCoroutine(HiddenText());
+
+            // タイマーを更新
+            textGameTimer.text = "" + (int)gameDirector.GameTimer;
+
+            if (gameDirector.GameTimer <= 0)
+            {// タイマーが0以下になったら
+
+                // タイマーが0以下にならないようにする
+                textGameTimer.text = "" + 0;
+
+                if (gameDirector.RoundCnt <= enemyManager.Enemy.Length)
+                {
+                    // 現在の時間を設定
+                    textGameTimer.text = "" + (int)gameDirector.gameTimer;
+
+                    // 攻撃力の数値を元に戻す
+                    power.text = "" + 0;
+                    // 攻撃ボタンを非表示
+                    power.enabled = false;
+                    // ダメージ数を非表示
+                    attackButton.SetActive(false);
+                }
+                else
+                {
+                    // Updateに入らないようにする
+                    enabled = false;
+
+                    // この時点でUpdateから抜ける
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    // Attackボタン押した時の処理
+    public void AttackButton()
+    {
+        // プレイヤーの攻撃を終了
+        gameDirector.EndAttack();
+
+        //StartCoroutine(HiddenText());
+
+        // 攻撃力の数値を元に戻す
+        power.text = "" + 0;
+        // ダメージ数を非表示
+        power.enabled = false;
+        // 攻撃ボタンを非表示
+        attackButton.SetActive(false);
+    }
+
+    /*public void TurnText()
+    {
+        if (gameDirector.IsPlayerTurn)
+        {
+            playerTurnText.enabled = true;
+            enemyTurnText.enabled = false;
+        }
+        else if (gameDirector.IsEnemyTurn)
+        {
+            playerTurnText.enabled = false;
+            enemyTurnText.enabled = true;
+        }
+    }*/
+
+    public IEnumerator ChangeText()
+    {
+        if (gameDirector.IsPlayerTurn)
+        {
+            playerTurnText.SetActive(true);
+            enemyTurnText.SetActive(false);
+        } 
+        else if (gameDirector.IsEnemyTurn)
+        {
+            playerTurnText.SetActive(false);
+            enemyTurnText.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(1);
+
+        if (gameDirector.IsPlayerTurn)
+        {
+            playerTurnText.SetActive(false);
+        }
+        else if (gameDirector.IsEnemyTurn)
+        {
+            enemyTurnText.SetActive(false);
+        }
+    }
+
+    public void RoundUpText(int round)
+    {
+        if (round == 0)
+        {
+            roundText.SetActive(true);
+
+            roundUpText.text = "Round " + (round + 1);
+
+            enemyTurnText.SetActive(false);
+        }
+        else if (lastEnemy == enemyManager.Enemy[gameDirector.RoundCnt])
+        {
+            roundText.SetActive(true);
+
+            roundUpText.text = "Last Round";
+        }
+        else
+        {
+            roundText.SetActive(true);
+
+            roundUpText.text = "Round " + (round + 1);
+        }
+
+        StartCoroutine(HideRoundText());
+    }
+
+    public IEnumerator HideRoundText()
+    {
+        yield return new WaitForSeconds(1);
+
+        roundText.SetActive(false);
+    }
+
+    /*public void Change()
+    {
+        gameDirector.
+    }*/
+}
