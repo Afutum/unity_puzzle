@@ -56,11 +56,19 @@ public class GameDirector : MonoBehaviour
     bool isDelete = false;
     public bool IsDelete { get { return isDelete; } }
 
+    bool isClear;
+    public bool IsClear { get { return isClear; } }
+
+    bool isGameOver;
+    public bool IsGameOver { get { return isGameOver; } }
+
     public float GameTimer { get { return gameTimer; } }
 
     int hideRoundCnt = 0;
 
     GameObject bubble;
+
+    [SerializeField] AudioClip chainSE;
 
     // Start is called before the first frame update
     void Start()
@@ -72,6 +80,8 @@ public class GameDirector : MonoBehaviour
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
 
         player = GameObject.Find("player").GetComponent<PlayerManager>();
+
+        audioSource = GetComponent<AudioSource>();
 
         // Audio
         //audioSource = GetComponent<AudioSource>();
@@ -91,6 +101,9 @@ public class GameDirector : MonoBehaviour
         isEnemyTurn = true;
 
         isEnd = false;
+
+        isClear = false;
+        isGameOver = false;
 
         // アイテム生成
         SpawnItem(fieldItemCountMax);
@@ -135,7 +148,7 @@ public class GameDirector : MonoBehaviour
                             // 攻撃を終わらせる
                             isDelete = false;
 
-                            // ラウンド数が2以下だったら
+                            // ラウンド数が敵より少なかったら
                             if (roundCnt < enemy.Enemy.Length)
                             {
                                 // タイマーを戻す
@@ -193,6 +206,8 @@ public class GameDirector : MonoBehaviour
                         // リザルト画面表示
                         //gameResult.SetActive(true);
 
+                        isClear = true;
+
                         GameEnd();
 
                         // Updateに入らないようにする
@@ -237,6 +252,8 @@ public class GameDirector : MonoBehaviour
 
                     if (isSameColor && distans <= 1.5f && !lineBubbles.Contains(hitBubble))
                     {
+                        audioSource.PlayOneShot(chainSE);
+
                         // ライン追加
                         lineBubbles.Add(hitBubble);
                     }
@@ -320,10 +337,18 @@ public class GameDirector : MonoBehaviour
     // シーンのロードを遅らせる
     private IEnumerator waitAndLoadScene()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.5f);
 
-        // リザルト画面
-        SceneManager.LoadScene("Result");
+        if (isClear)
+        {
+            // リザルト画面
+            SceneManager.LoadScene("Clear");
+        }
+        else if (isGameOver)
+        {
+            // リザルト画面
+            SceneManager.LoadScene("GameOver");
+        }
     }
 
     // アイテム生成
@@ -545,5 +570,15 @@ public class GameDirector : MonoBehaviour
     public void ResetAttackButton()
     {
         isAttackBtn = false;
+    }
+
+    public void WinPlayer()
+    {
+        isClear = true;
+    }
+
+    public void LosePlayer()
+    {
+        isGameOver = true;
     }
 }

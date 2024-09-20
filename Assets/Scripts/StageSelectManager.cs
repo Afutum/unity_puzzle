@@ -7,6 +7,13 @@ public class StageSelectManager : MonoBehaviour
 {
     public int stageId = 0;
 
+    //Audio
+    AudioSource audioSource;
+
+    [SerializeField] AudioClip clickSE;
+
+    UIManager ui;
+
     // apiécä[
     /*private void Start()
     {
@@ -16,9 +23,16 @@ public class StageSelectManager : MonoBehaviour
         }));
     }*/
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void PushSelectButton(int selectNum)
     {
         StartCoroutine(WaitLoadScene(selectNum));
+
+        audioSource.PlayOneShot(clickSE);
 
         stageId = selectNum;
     }

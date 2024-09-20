@@ -21,6 +21,10 @@ public class EnemyManager : MonoBehaviour
 
     EnemyAnimator[] enemyAnim;
 
+    AudioSource audioSource;
+
+    [SerializeField] AudioClip attackSE;
+
     public EnemyAnimator GetEnemyAnimator()
     {
         return enemyAnim[gameDirector.RoundCnt];
@@ -38,6 +42,8 @@ public class EnemyManager : MonoBehaviour
 
     // プレイヤーに与えるダメージ
     int attackPower = 0;
+    public int AttackPower { get { return attackPower; } }
+
     // ダメージ変動率の上限値
     const float volatilityAtcMax = 1.2f;
     // ダメージ変動率の下限値
@@ -64,7 +70,7 @@ public class EnemyManager : MonoBehaviour
     {
         // GameDirectorスクリプトの取得
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        //uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         playerManager = GameObject.Find("player").GetComponent<PlayerManager>();
 
         enemyAnim = new EnemyAnimator[enemy.Length];
@@ -97,6 +103,8 @@ public class EnemyManager : MonoBehaviour
         divHp = hp[gameDirector.RoundCnt] / 2;
 
         EnemyCurrentStatus = EnemyStatus.None;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -137,6 +145,9 @@ public class EnemyManager : MonoBehaviour
 
         if (EnemyCurrentStatus != EnemyStatus.Die)
         {
+            audioSource.PlayOneShot(attackSE);
+            uiManager.EnemyPower();
+
             // プレイヤーのダメージアニメーション開始
             playerManager.SetDamageAnim();
         }
@@ -146,6 +157,8 @@ public class EnemyManager : MonoBehaviour
         {
             // プレイヤーの死ぬアニメーションを追加
             playerManager.SetDieAnim();
+
+            gameDirector.LosePlayer();
 
             // ゲーム終了
             gameDirector.GameEnd();
@@ -187,6 +200,8 @@ public class EnemyManager : MonoBehaviour
 
                 if (enemy.Last() && hp.Last() <= 0)
                 {
+                    gameDirector.WinPlayer();
+
                     gameDirector.GameEnd();
                 }
                 else if (enemy.Last().activeSelf == false)

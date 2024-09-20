@@ -18,10 +18,13 @@ EditorBuildSettings:
     path: Assets/Scenes/Stage/Game2.unity
     guid: eb912ea61cdaabd4fb6c27c9a5692443
   - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: 834cd190e63bc84419ca8403546dcf72
+  - enabled: 1
+    path: Assets/Scenes/Clear.unity
+    guid: d6bd63fc10072cc45ad616e38d74ac9a
+  - enabled: 1
     path: Assets/Scenes/UI.unity
     guid: 2f4e349eb7795da4e985b53e0708f6c4
-  - enabled: 1
-    path: Assets/Scenes/Result.unity
-    guid: 655219949d4e711438fbd79023da5349
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 7726f3f1952283441917a84688785886, type: 2}

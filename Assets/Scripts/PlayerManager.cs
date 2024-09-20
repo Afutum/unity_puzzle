@@ -1,10 +1,11 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
     // hp
-    int hp = 200;
+    int hp = 1000;
     public int Hp {  get { return hp; } }
     int divHp;
     public int DivHp { get {  return divHp; } }
@@ -17,6 +18,12 @@ public class PlayerManager : MonoBehaviour
 
     Action completeAction;
 
+    UIManager uiManager;
+
+    AudioSource audioSource;
+
+    [SerializeField] AudioClip attackSE;
+
     public Action CompleteAction {  get { return completeAction; } }
 
     // Start is called before the first frame update
@@ -24,6 +31,10 @@ public class PlayerManager : MonoBehaviour
     {
         enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
         animator = GetComponent<Animator>();
+
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+
+        audioSource = GetComponent<AudioSource>();
 
         divHp = hp / 2;
     }
@@ -57,6 +68,7 @@ public class PlayerManager : MonoBehaviour
     // 攻撃
     public void Attack()
     {
+        uiManager.AttackPower();
         StartCoroutine(enemyManager.SubHp(power));
     }
 
@@ -74,6 +86,8 @@ public class PlayerManager : MonoBehaviour
 
         // 0.7秒後にアニメーションを終了
         Invoke(nameof(ResetAnim), 0.7f);
+
+        audioSource.PlayOneShot(attackSE);
     }
 
     // アニメーションを元に戻す

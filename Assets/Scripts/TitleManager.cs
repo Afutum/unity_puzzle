@@ -7,10 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class TitleManager : MonoBehaviour
 {
+    //Audio
+    AudioSource audioSource;
+
+    [SerializeField] AudioClip clickSE;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -18,6 +23,8 @@ public class TitleManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            audioSource.PlayOneShot(clickSE);
+
             bool isSuccess = NetworkManager.Instance.LoadUserData();
             if (!isSuccess)
             {

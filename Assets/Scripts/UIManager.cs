@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI textComboCounter;
     [SerializeField] TextMeshProUGUI combo;
     [SerializeField] TextMeshProUGUI power;
+    [SerializeField] TextMeshProUGUI powerBack;
+    [SerializeField] TextMeshProUGUI enemyPower;
+    [SerializeField] TextMeshProUGUI enemyPowerBack;
     [SerializeField] TextMeshProUGUI clear;
     [SerializeField] GameObject attackButton;
     [SerializeField] GameObject playerTurnText;
     [SerializeField] GameObject enemyTurnText;
     [SerializeField] GameObject roundText;
     [SerializeField] Text roundUpText;
+    [SerializeField] GameObject clearObj;
+    [SerializeField] GameObject gameOver;
 
     GameDirector gameDirector;
     EnemyManager enemyManager;
@@ -32,6 +38,9 @@ public class UIManager : MonoBehaviour
         playerTurnText.SetActive(false);
         enemyTurnText.SetActive(true);
 
+        clearObj.SetActive(false);
+        gameOver.SetActive(false);
+
         // GameDirectorの取得
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
     }
@@ -41,7 +50,10 @@ public class UIManager : MonoBehaviour
     {
         // テキストを表示
         power.enabled = false;
+        powerBack.enabled = false;
         clear.enabled = false;
+        enemyPower.enabled = false;
+        enemyPowerBack.enabled = false;
 
         // 攻撃ボタンを非表示
         attackButton.SetActive(false);
@@ -61,9 +73,6 @@ public class UIManager : MonoBehaviour
     {
         if (gameDirector.IsDelete)
         {// 攻撃中なら
-            // ダメージ数を表示
-            power.enabled = true;
-            power.text = "" + (int)player.Power;
             // アタックボタンを表示
             attackButton.SetActive(true);
         }
@@ -95,6 +104,7 @@ public class UIManager : MonoBehaviour
                     power.text = "" + 0;
                     // 攻撃ボタンを非表示
                     power.enabled = false;
+                    powerBack.enabled = false;
                     // ダメージ数を非表示
                     attackButton.SetActive(false);
                 }
@@ -124,8 +134,6 @@ public class UIManager : MonoBehaviour
 
         // 攻撃力の数値を元に戻す
         power.text = "" + 0;
-        // ダメージ数を非表示
-        power.enabled = false;
         // 攻撃ボタンを非表示
         attackButton.SetActive(false);
     }
@@ -206,4 +214,65 @@ public class UIManager : MonoBehaviour
     {
         gameDirector.
     }*/
+
+    public void Clear()
+    {
+        clearObj.SetActive(true);
+    }
+
+    public void GameOver()
+    {
+        gameOver.SetActive(true);
+    }
+
+    public void AllClear()
+    {
+        roundText.SetActive(false);
+        attackButton.SetActive(false);
+        textGameTimer.enabled = false;
+        power.enabled = false;
+        powerBack.enabled = false;
+        clear.enabled = false;
+        playerTurnText.SetActive(false);
+        enemyTurnText.SetActive(false);
+        enemyPower.enabled = false;
+        enemyPowerBack.enabled = false;
+    }
+
+    public void AttackPower()
+    {
+        // ダメージ数を表示
+        power.enabled = true;
+        powerBack.enabled = true;
+        power.text = "" + (int)player.Power;
+        powerBack.text = "" + (int)player.Power;
+
+        StartCoroutine(HideAttackPower());
+    }
+
+    public IEnumerator HideAttackPower()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        power.enabled = false;
+        powerBack.enabled = false;
+    }
+
+    public void EnemyPower()
+    {
+        enemyPower.enabled = true;
+        enemyPowerBack.enabled = true;
+        enemyPower.text = "" + (int)enemyManager.AttackPower;
+        enemyPowerBack.text = "" + (int)enemyManager.AttackPower;
+
+        StartCoroutine(HideAttackEnemyPower());
+    }
+
+    public IEnumerator HideAttackEnemyPower()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        enemyPower.enabled = false;
+        enemyPowerBack.enabled = false;
+    }
 }
