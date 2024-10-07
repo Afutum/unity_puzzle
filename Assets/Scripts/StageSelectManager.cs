@@ -62,6 +62,26 @@ public class StageSelectManager : MonoBehaviour
             case 5:
                 SceneManager.LoadScene("Game5");
                 break;
+
+            case 6:
+                SceneManager.LoadScene("Game6");
+                break;
+
+            case 7:
+                SceneManager.LoadScene("Game7");
+                break;
+
+            case 8:
+                SceneManager.LoadScene("Game8");
+                break;
+
+            case 9:
+                SceneManager.LoadScene("Game9");
+                break;
+
+            case 10:
+                SceneManager.LoadScene("Game10");
+                break;
         }
     }
 }
