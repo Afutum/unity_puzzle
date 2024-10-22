@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 8346352667147323895}
   - component: {fileID: 3752010736792571570}
   m_Layer: 0
-  m_Name: slime 1
+  m_Name: slime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,7 +734,7 @@ GameObject:
   m_Component:
   - component: {fileID: 816631728662191679}
   - component: {fileID: 3876967136030350525}
-  - component: {fileID: 1519424476588357881}
+  - component: {fileID: 3699333860886328251}
   m_Layer: 5
   m_Name: HPbar
   m_TagString: Untagged
@@ -803,7 +803,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 4645716943411368214}
   m_HandleRect: {fileID: 0}
@@ -815,7 +815,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1519424476588357881
+--- !u!114 &3699333860886328251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -828,6 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 2244488204420543374}
+  maxHp: 0
   slider: {fileID: 3876967136030350525}
 --- !u!1 &7921194886130249910
 GameObject:

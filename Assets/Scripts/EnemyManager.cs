@@ -105,7 +105,7 @@ public class EnemyManager : MonoBehaviour
             baseDamege[i] = UnityEngine.Random.Range(70,201);
         }
 
-        enemyHPbar.MaxHp(hp.First());
+        enemyHPbar.MaxHp(hp[0]);
 
         // hp‚Ì”¼•ª‚ðŠi”[
         divHp = hp[gameDirector.RoundCnt] / 2;

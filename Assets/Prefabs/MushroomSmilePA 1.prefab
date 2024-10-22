@@ -1091,7 +1091,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4267626455043781413}
   - component: {fileID: 4974058273049866395}
-  - component: {fileID: 4596040574968762058}
+  - component: {fileID: 7716350168324872195}
   m_Layer: 5
   m_Name: HPbar
   m_TagString: Untagged
@@ -1160,7 +1160,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 632265808596858581}
   m_HandleRect: {fileID: 0}
@@ -1172,7 +1172,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4596040574968762058
+--- !u!114 &7716350168324872195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1185,4 +1185,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 8756854454696201649}
+  maxHp: 0
   slider: {fileID: 4974058273049866395}

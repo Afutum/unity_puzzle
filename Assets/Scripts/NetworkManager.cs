@@ -105,7 +105,7 @@ public class NetworkManager : MonoBehaviour
     public IEnumerator GetStage(Action<StageResponse[]> result)
     {
         // ステージ取得APIを実行
-        UnityWebRequest request = UnityWebRequest.Get(API_BASE_URL + "stages/index/" + this.userID);
+        UnityWebRequest request = UnityWebRequest.Get(API_BASE_URL + "stages/" + this.userID);
         yield return request.SendWebRequest();
 
         if(request.result == UnityWebRequest.Result.Success
@@ -126,8 +126,9 @@ public class NetworkManager : MonoBehaviour
 
     public void SaveStageData(int stageId)
     {
-        // ユーザー情報を保存する
-        SaveData saveData = new SaveData();
+        // ステージ情報を保存する
+        SaveData saveData = new SaveData(); 
+        saveData.UserID = this.userID;
         saveData.StageID = stageId;
         string json = JsonConvert.SerializeObject(saveData);
         // StreamWriterクラスでファイルにjsonを保存
@@ -136,6 +137,39 @@ public class NetworkManager : MonoBehaviour
         writer.Write(json);
         writer.Flush();
         writer.Close();
+    }
+
+    public IEnumerator RegistClearStage(int userId,int stageId,int fastestTime,Action<bool> result)
+    {
+        RegistUserStageRequest requestData = new RegistUserStageRequest();
+        requestData.UserId = userID;
+        requestData.StageID = stageId;
+        requestData.FastestTime = fastestTime;
+
+        // サーバーに送信するオブジェクトをJSONに変換
+        string json = JsonConvert.SerializeObject(requestData);
+        // 送信
+        UnityWebRequest request =
+            UnityWebRequest.Post(API_BASE_URL + "stage/store", json, "application/json");
+
+        // 結果を受信するまで待機
+        yield return request.SendWebRequest();
+
+        bool isSuccess = false;
+        if (request.result == UnityWebRequest.Result.Success
+            && request.responseCode == 200)
+        {
+            // レスポンスボディ(json)の文字列を取得
+            string jsonResult = request.downloadHandler.text;
+            // jsonをデシリアライズ
+            RegistUserResponse response = JsonConvert.DeserializeObject<RegistUserResponse>(jsonResult);
+
+            this.userID = response.UserID;
+            SaveStageData(stageId);
+            isSuccess = true;
+        }
+
+        result?.Invoke(isSuccess); // ここで呼びだし元のresult処理を呼び出す
     }
 
     public bool LoadStageData()

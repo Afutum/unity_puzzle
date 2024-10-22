@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StageSelectManager : MonoBehaviour
 {
+    [SerializeField] Button[] buttons;
+
     public int stageId = 0;
 
     //Audio
@@ -26,6 +29,23 @@ public class StageSelectManager : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        StartCoroutine(NetworkManager.Instance.GetStage(stages =>
+        {
+            int maxStageId = 0;
+
+            for (int i = 0; i < stages.Length; i++)
+            {
+                if (stages[i].StageClearCount >= 1 && maxStageId < stages[i].StageID)
+                {
+                    maxStageId = stages[i].StageID;
+                }
+            }
+
+            for (int n = 0; n < maxStageId + 1; n++)
+            {
+                buttons[n].interactable = true;
+            }
+        }));
     }
 
     public void PushSelectButton(int selectNum)
@@ -44,43 +64,43 @@ public class StageSelectManager : MonoBehaviour
         switch (loadNum)
         {
             case 1:
-                SceneManager.LoadScene("Game1");
+                SceneManager.LoadScene("Stage1");
                 break;
 
             case 2:
-                SceneManager.LoadScene("Game2");
+                SceneManager.LoadScene("Stage2");
                 break;
 
             case 3:
-                SceneManager.LoadScene("Game3");
+                SceneManager.LoadScene("Stage3");
                 break;
 
             case 4:
-                SceneManager.LoadScene("Game4");
+                SceneManager.LoadScene("Stage4");
                 break;
 
             case 5:
-                SceneManager.LoadScene("Game5");
+                SceneManager.LoadScene("Stage5");
                 break;
 
             case 6:
-                SceneManager.LoadScene("Game6");
+                SceneManager.LoadScene("Stage6");
                 break;
 
             case 7:
-                SceneManager.LoadScene("Game7");
+                SceneManager.LoadScene("Stage7");
                 break;
 
             case 8:
-                SceneManager.LoadScene("Game8");
+                SceneManager.LoadScene("Stage8");
                 break;
 
             case 9:
-                SceneManager.LoadScene("Game9");
+                SceneManager.LoadScene("Stage9");
                 break;
 
             case 10:
-                SceneManager.LoadScene("Game10");
+                SceneManager.LoadScene("Stage10");
                 break;
         }
     }
