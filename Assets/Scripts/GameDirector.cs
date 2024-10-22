@@ -122,8 +122,9 @@ public class GameDirector : MonoBehaviour
             // この時点でUpdateから抜ける
             return;
         }
-        else if (isPlayerTurn == true)
-        {// isEndがfalse・敵のターンじゃないとき
+        else if (isPlayerTurn == true && 
+            enemy.EnemyCurrentStatus == EnemyManager.EnemyStatus.None)
+        {// isEndがfalse・敵のターンじゃないとき・敵の状態がNoneのとき
 
             if (hideRoundCnt == 0)
             {
@@ -316,7 +317,6 @@ public class GameDirector : MonoBehaviour
             // 敵の状態がなにもないなら
             else if (enemy.EnemyCurrentStatus == EnemyManager.EnemyStatus.None)
             {
-
                 Debug.Log(isEnemyTurn);
                 // 敵の攻撃を開始
                 StartCoroutine(enemy.Attack(isEnemyTurn));

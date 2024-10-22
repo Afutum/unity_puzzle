@@ -22,6 +22,8 @@ public class PlayerManager : MonoBehaviour
 
     AudioSource audioSource;
 
+    PlayerHPbar playerHPbar;
+
     [SerializeField] AudioClip attackSE;
 
     public Action CompleteAction {  get { return completeAction; } }
@@ -32,9 +34,13 @@ public class PlayerManager : MonoBehaviour
         enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
         animator = GetComponent<Animator>();
 
+        playerHPbar = GameObject.Find("PlayerHPbar").GetComponent<PlayerHPbar>();
+
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
 
         audioSource = GetComponent<AudioSource>();
+
+        playerHPbar.MaxHp(hp);
 
         divHp = hp / 2;
     }
@@ -49,6 +55,8 @@ public class PlayerManager : MonoBehaviour
     public void SubPlayerHp(int enemAttackPower)
     {
         hp -= enemAttackPower;
+
+        
 
         Debug.Log(hp);
     }
@@ -106,6 +114,7 @@ public class PlayerManager : MonoBehaviour
     public void SetDamageAnim()
     {
         animator.SetTrigger("Damage");
+        playerHPbar.NowHp(hp);
     }
 
     // 死ぬアニメーション

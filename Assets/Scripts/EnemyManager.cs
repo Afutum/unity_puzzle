@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,8 @@ public class EnemyManager : MonoBehaviour
 
     EnemyAnimator[] enemyAnim;
 
+    EnemyHPbar enemyHPbar;
+
     AudioSource audioSource;
 
     [SerializeField] AudioClip attackSE;
@@ -33,7 +36,7 @@ public class EnemyManager : MonoBehaviour
     public Action CompleteAtk { get { return completeAtk; } }
 
     // 体力
-    int[] hp;
+    public int[] hp;
 
     public int[] Hp { get { return hp; } }
 
@@ -60,6 +63,7 @@ public class EnemyManager : MonoBehaviour
         None,           // なにもない
         WaitAttack,     // 攻撃待機
         AttackComplete, // 攻撃完了
+        Change,         // 敵の切り替え
         Die             // 死亡
     }
 
@@ -72,6 +76,8 @@ public class EnemyManager : MonoBehaviour
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         playerManager = GameObject.Find("player").GetComponent<PlayerManager>();
+
+        enemyHPbar = GameObject.Find("HPbar").GetComponent<EnemyHPbar>();
 
         enemyAnim = new EnemyAnimator[enemy.Length];
 
@@ -94,10 +100,12 @@ public class EnemyManager : MonoBehaviour
         for (int i = 0; i < hp.Length; i++)
         {
             // hp・攻撃力の生成
-            hp[i] = 300;
+            hp[i] = 300 + (100 * i);
             // 70～200の間からランダムで抽出
             baseDamege[i] = UnityEngine.Random.Range(70,201);
         }
+
+        enemyHPbar.MaxHp(hp.First());
 
         // hpの半分を格納
         divHp = hp[gameDirector.RoundCnt] / 2;
@@ -141,7 +149,7 @@ public class EnemyManager : MonoBehaviour
         EnemyCurrentStatus = EnemyStatus.WaitAttack;
 
         // 1秒処理を遅らせる
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         if (EnemyCurrentStatus != EnemyStatus.Die)
         {
@@ -181,6 +189,8 @@ public class EnemyManager : MonoBehaviour
         {
             // hpを引数分減らす
             hp[gameDirector.RoundCnt] -= attackPower;
+            // HPバーを現在のHP分に減らす
+            enemyHPbar.NowHp(hp[gameDirector.RoundCnt]);
 
             // HPが0以下になったら
             if (hp[gameDirector.RoundCnt] <= 0)
@@ -198,18 +208,18 @@ public class EnemyManager : MonoBehaviour
                 // このスクリプトがついているオブジェクトを非表示
                 enemy[gameDirector.RoundCnt].SetActive(false);
 
+                // 最後の敵のhpが0以下になった場合
                 if (enemy.Last() && hp.Last() <= 0)
                 {
                     gameDirector.WinPlayer();
 
                     gameDirector.GameEnd();
                 }
+                // 最後の敵以外のとき
                 else if (enemy.Last().activeSelf == false)
                 {
                     // ラウンドを進める
                     gameDirector.CountRound();
-
-                    hp[gameDirector.RoundCnt] = 300;
 
                     // roundCnt番目の敵を表示
                     enemy[gameDirector.RoundCnt].SetActive(true);
@@ -217,6 +227,11 @@ public class EnemyManager : MonoBehaviour
                     EnemyCurrentStatus = EnemyStatus.None;
 
                     gameDirector.ResetAttackButton();
+
+                    enemyHPbar = GameObject.Find("HPbar").GetComponent<EnemyHPbar>();
+
+                    // HPバーの最大値を設定
+                    enemyHPbar.MaxHp(hp[gameDirector.RoundCnt]);
                 }
                 Debug.Log(gameDirector.RoundCnt);
             }
