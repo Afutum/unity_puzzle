@@ -23,15 +23,9 @@ public class ClearManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*bool isSuccess = NetworkManager.Instance.LoadStageData();
-
-        if (!isSuccess)
-        {
-            NetworkManager.Instance.SaveStageData(stageSelectManager.stageId);
-        }*/
         ui.AllClear();
         ui.Clear();
-
+  
         if (Input.GetMouseButtonDown(0))
         {
             audioSource.PlayOneShot(clickSE);

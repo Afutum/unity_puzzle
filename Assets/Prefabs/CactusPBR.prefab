@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 452530634300866321}
   - component: {fileID: 7041546344546091995}
-  - component: {fileID: 7147713265466783652}
+  - component: {fileID: 2604670098873314156}
   m_Layer: 5
   m_Name: HPbar
   m_TagString: Untagged
@@ -25,7 +25,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173128185892153666}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 0
@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.27}
+  m_AnchoredPosition: {x: -0, y: -0.26999998}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7041546344546091995
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7147713265466783652
+--- !u!114 &2604670098873314156
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 8646692648148030469}
+  hpBar: {fileID: 7041546344546091995}
   maxHp: 0
-  slider: {fileID: 7041546344546091995}
 --- !u!1 &619098021873857568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,7 +1110,7 @@ Transform:
   m_GameObject: {fileID: 8773819819591048844}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.9438587, z: -0, w: -0.33034962}
-  m_LocalPosition: {x: 1.23, y: 1.86, z: -1.09}
+  m_LocalPosition: {x: -0.000010967255, y: 0.000014662743, z: 0.000011563301}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

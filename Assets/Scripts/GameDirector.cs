@@ -172,7 +172,10 @@ public class GameDirector : MonoBehaviour
                                 // ƒŠƒUƒ‹ƒg‰æ–Ê•\Ž¦
                                 //gameResult.SetActive(true);
 
-                                GameEnd();
+                                NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
+                                result => {
+                                    GameEnd();
+                                });
 
                                 // Update‚É“ü‚ç‚È‚¢‚æ‚¤‚É‚·‚é
                                 enabled = false;
@@ -209,7 +212,10 @@ public class GameDirector : MonoBehaviour
 
                         isClear = true;
 
-                        GameEnd();
+                        NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
+                            result => {
+                                GameEnd();
+                            });
 
                         // Update‚É“ü‚ç‚È‚¢‚æ‚¤‚É‚·‚é
                         enabled = false;

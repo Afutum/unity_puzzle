@@ -918,8 +918,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 4022170042468552990}
+  hpBar: {fileID: 3368308070361339865}
   maxHp: 0
-  slider: {fileID: 3368308070361339865}
 --- !u!1 &9210887743097706018
 GameObject:
   m_ObjectHideFlags: 0

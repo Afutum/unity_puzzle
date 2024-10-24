@@ -189,6 +189,8 @@ public class EnemyManager : MonoBehaviour
         {
             // hp‚ğˆø”•ªŒ¸‚ç‚·
             hp[gameDirector.RoundCnt] -= attackPower;
+
+            enemyHPbar = GameObject.Find("HPbar").GetComponent<EnemyHPbar>();
             // HPƒo[‚ğŒ»İ‚ÌHP•ª‚ÉŒ¸‚ç‚·
             enemyHPbar.NowHp(hp[gameDirector.RoundCnt]);
 
@@ -212,8 +214,11 @@ public class EnemyManager : MonoBehaviour
                 if (enemy.Last() && hp.Last() <= 0)
                 {
                     gameDirector.WinPlayer();
-
-                    gameDirector.GameEnd();
+ 
+                    StartCoroutine(NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
+                            result => {
+                                gameDirector.GameEnd();
+                            }));
                 }
                 // ÅŒã‚Ì“GˆÈŠO‚Ì‚Æ‚«
                 else if (enemy.Last().activeSelf == false)

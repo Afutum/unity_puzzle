@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 public class EnemyHPbar : MonoBehaviour
 {
     [SerializeField] Text hp;
+    [SerializeField] Slider hpBar;
 
     EnemyManager enemyManager;
     GameDirector gameDirector;
@@ -15,7 +17,12 @@ public class EnemyHPbar : MonoBehaviour
     public int maxHp = 0;
     // åªç›ÇÃHP
     int currentHp;
-    public Slider slider;
+    //public Slider slider;
+
+    private void Start()
+    {
+        enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+    }
 
     // åªç›ÇÃìGÇÃç≈ëÂHpÇäiî[Ç∑ÇÈ
     public void MaxHp(int Hp)
@@ -23,7 +30,7 @@ public class EnemyHPbar : MonoBehaviour
         maxHp = Hp;
         hp.text = "" + Hp;
         currentHp = Hp;
-        slider.value = 1;
+        hpBar.value = 1;
     }
 
     public void NowHp(int Hp)
@@ -34,8 +41,8 @@ public class EnemyHPbar : MonoBehaviour
         {
             currentHp = 0;
         }
+        hpBar.value = (float)currentHp / (float)maxHp;
 
         hp.text = "" + currentHp;
-        slider.value = (float)currentHp / (float)maxHp; ;
     }
 }

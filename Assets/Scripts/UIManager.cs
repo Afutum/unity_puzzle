@@ -42,7 +42,12 @@ public class UIManager : MonoBehaviour
         gameOver.SetActive(false);
 
         // GameDirectorの取得
-        gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        GameObject gameObj = GameObject.Find("GameDirector");
+
+        if( gameObj != null ) 
+        { 
+            gameDirector = gameObj.GetComponent<GameDirector>(); 
+        }
     }
 
     // Start is called before the first frame update
@@ -61,16 +66,25 @@ public class UIManager : MonoBehaviour
         roundText.SetActive(false);
 
         // EnemyManagerの取得
-        enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
-        // PlayerManagerの取得
-        player = GameObject.Find("player").GetComponent<PlayerManager>();
+        GameObject obj = GameObject.Find("EnemyManager");
 
-        lastEnemy = enemyManager.Enemy.Last();
+        if( obj != null )
+        {
+            enemyManager = obj.GetComponent<EnemyManager>();
+            // PlayerManagerの取得
+            player = GameObject.Find("player").GetComponent<PlayerManager>();
+            lastEnemy = enemyManager.Enemy.Last();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(gameDirector == null)
+        {
+            return;
+        }
+
         if (gameDirector.IsDelete)
         {// 攻撃中なら
             // アタックボタンを表示

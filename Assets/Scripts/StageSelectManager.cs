@@ -8,7 +8,7 @@ public class StageSelectManager : MonoBehaviour
 {
     [SerializeField] Button[] buttons;
 
-    public int stageId = 0;
+    public static int stageId = 0;
 
     //Audio
     AudioSource audioSource;
@@ -16,15 +16,6 @@ public class StageSelectManager : MonoBehaviour
     [SerializeField] AudioClip clickSE;
 
     UIManager ui;
-
-    // apiŽcŠ[
-    /*private void Start()
-    {
-        StartCoroutine(NetworkManager.Instance.GetStage(starges =>
-        {
-            
-        }));
-    }*/
 
     private void Start()
     {

@@ -16,6 +16,8 @@ public class NetworkManager : MonoBehaviour
     // getプロパティで呼び出した初回時にインスタンス生成してstaticで保持
     private static NetworkManager instance;
 
+
+
     public static NetworkManager Instance
     {
         get
@@ -139,19 +141,19 @@ public class NetworkManager : MonoBehaviour
         writer.Close();
     }
 
-    public IEnumerator RegistClearStage(int userId,int stageId,int fastestTime,Action<bool> result)
+    public IEnumerator RegistClearStage(int stageId,Action<bool> result)
     {
         RegistUserStageRequest requestData = new RegistUserStageRequest();
-        requestData.UserId = userID;
+        requestData.UserId = this.userID;
         requestData.StageID = stageId;
-        requestData.FastestTime = fastestTime;
+        requestData.FastestTime = 0;
 
         // サーバーに送信するオブジェクトをJSONに変換
         string json = JsonConvert.SerializeObject(requestData);
         // 送信
         UnityWebRequest request =
-            UnityWebRequest.Post(API_BASE_URL + "stage/store", json, "application/json");
-
+            UnityWebRequest.Post(API_BASE_URL + "stages/store", json, "application/json");
+ 
         // 結果を受信するまで待機
         yield return request.SendWebRequest();
 
@@ -159,13 +161,6 @@ public class NetworkManager : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success
             && request.responseCode == 200)
         {
-            // レスポンスボディ(json)の文字列を取得
-            string jsonResult = request.downloadHandler.text;
-            // jsonをデシリアライズ
-            RegistUserResponse response = JsonConvert.DeserializeObject<RegistUserResponse>(jsonResult);
-
-            this.userID = response.UserID;
-            SaveStageData(stageId);
             isSuccess = true;
         }
 
