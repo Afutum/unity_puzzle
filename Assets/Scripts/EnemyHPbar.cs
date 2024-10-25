@@ -41,6 +41,7 @@ public class EnemyHPbar : MonoBehaviour
         {
             currentHp = 0;
         }
+
         hpBar.value = (float)currentHp / (float)maxHp;
 
         hp.text = "" + currentHp;
