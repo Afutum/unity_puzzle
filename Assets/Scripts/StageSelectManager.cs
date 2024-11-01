@@ -93,6 +93,10 @@ public class StageSelectManager : MonoBehaviour
             case 10:
                 SceneManager.LoadScene("Stage10");
                 break;
+
+            case 11:
+                SceneManager.LoadScene("Raid");
+                break;
         }
     }
 }

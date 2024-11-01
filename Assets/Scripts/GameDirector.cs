@@ -172,10 +172,7 @@ public class GameDirector : MonoBehaviour
                                 // ƒŠƒUƒ‹ƒg‰æ–Ê•\¦
                                 //gameResult.SetActive(true);
 
-                                NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
-                                result => {
-                                    GameEnd();
-                                });
+                                enemy.TerminateBattle();
 
                                 // Update‚É“ü‚ç‚È‚¢‚æ‚¤‚É‚·‚é
                                 enabled = false;
@@ -212,10 +209,7 @@ public class GameDirector : MonoBehaviour
 
                         isClear = true;
 
-                        NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
-                            result => {
-                                GameEnd();
-                            });
+                        enemy.TerminateBattle();
 
                         // Update‚É“ü‚ç‚È‚¢‚æ‚¤‚É‚·‚é
                         enabled = false;
@@ -327,16 +321,6 @@ public class GameDirector : MonoBehaviour
                 // “G‚ÌUŒ‚‚ğŠJn
                 StartCoroutine(enemy.Attack(isEnemyTurn));
             }
-            /*else if(enemy.IsEnemyChange == true)
-            {
-                enemy.ResetEnemyChange();
-
-                // “G‚Ìó‘Ô‚ğ‚È‚µ‚É‚·‚é
-                enemy.EnemyCurrentStatus = EnemyManager.EnemyStatus.None;
-
-                isPlayerTurn = true;
-                isEnemyTurn = false;
-            }*/
         }
     }
 
@@ -586,5 +570,10 @@ public class GameDirector : MonoBehaviour
     public void LosePlayer()
     {
         isGameOver = true;
+    }
+
+    private void battle()
+    {
+
     }
 }

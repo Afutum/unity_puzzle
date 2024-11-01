@@ -9,11 +9,11 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] public Scrollbar enemyHp;
 
-    [SerializeField] GameObject[] enemy;
+    [SerializeField] protected GameObject[] enemy;
 
     public GameObject[] Enemy {  get { return enemy; } }
 
-    GameDirector gameDirector;
+    protected GameDirector gameDirector;
     UIManager uiManager;
     PlayerManager playerManager;
 
@@ -36,12 +36,12 @@ public class EnemyManager : MonoBehaviour
     public Action CompleteAtk { get { return completeAtk; } }
 
     // 体力
-    public int[] hp;
+    protected int[] hp;
 
     public int[] Hp { get { return hp; } }
 
     // 攻撃力
-    int[] baseDamege;
+    protected int[] baseDamege;
 
     // プレイヤーに与えるダメージ
     int attackPower = 0;
@@ -69,8 +69,13 @@ public class EnemyManager : MonoBehaviour
 
     public EnemyStatus EnemyCurrentStatus { get; set; }
 
+    private void Start()
+    {
+        SetStart();
+    }
+
     // Start is called before the first frame update
-    void Start()
+    protected void SetStart()
     {
         // GameDirectorスクリプトの取得
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
@@ -97,13 +102,7 @@ public class EnemyManager : MonoBehaviour
 
         enemy[gameDirector.RoundCnt].SetActive(true);
 
-        for (int i = 0; i < hp.Length; i++)
-        {
-            // hp・攻撃力の生成
-            hp[i] = 300 + (100 * i);
-            // 70～200の間からランダムで抽出
-            baseDamege[i] = UnityEngine.Random.Range(70,201);
-        }
+        SetEnemyDamage();
 
         enemyHPbar.MaxHp(hp[0]);
 
@@ -115,10 +114,29 @@ public class EnemyManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    virtual protected void SetEnemyDamage()
+    {
+        for (int i = 0; i < hp.Length; i++)
+        {
+            // hp・攻撃力の生成
+            hp[i] = 300 + (100 * i);
+            // 70～200の間からランダムで抽出
+            baseDamege[i] = UnityEngine.Random.Range(70, 201);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    virtual protected void DiePlayer()
+    {
+        gameDirector.LosePlayer();
+
+        // ゲーム終了
+        gameDirector.GameEnd();
     }
 
     // 敵の攻撃
@@ -166,10 +184,7 @@ public class EnemyManager : MonoBehaviour
             // プレイヤーの死ぬアニメーションを追加
             playerManager.SetDieAnim();
 
-            gameDirector.LosePlayer();
-
-            // ゲーム終了
-            gameDirector.GameEnd();
+            DiePlayer();
         }
         // プレイヤーのHPが半分以下なら
         else if (playerManager.Hp < playerManager.DivHp)
@@ -215,10 +230,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     gameDirector.WinPlayer();
  
-                    StartCoroutine(NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
-                            result => {
-                                gameDirector.GameEnd();
-                            }));
+                    TerminateBattle();
                 }
                 // 最後の敵以外のとき
                 else if (enemy.Last().activeSelf == false)
@@ -249,6 +261,16 @@ public class EnemyManager : MonoBehaviour
             }
         }
     }
+
+    virtual public void TerminateBattle()
+    {
+        StartCoroutine(NetworkManager.Instance.RegistClearStage(StageSelectManager.stageId,
+                            result => {
+                                gameDirector.GameEnd();
+                            }));
+    }
+
+
 
     public void ResetEnemyChange()
     {

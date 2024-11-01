@@ -73,7 +73,7 @@ public class UIManager : MonoBehaviour
             enemyManager = obj.GetComponent<EnemyManager>();
             // PlayerManager�̎擾
             player = GameObject.Find("player").GetComponent<PlayerManager>();
-            lastEnemy = enemyManager.Enemy.Last();
+            //lastEnemy = enemyManager.Enemy.Last();
         }
     }
 
@@ -201,7 +201,7 @@ public class UIManager : MonoBehaviour
 
             enemyTurnText.SetActive(false);
         }
-        else if (lastEnemy == enemyManager.Enemy[gameDirector.RoundCnt])
+        else if (enemyManager.Enemy.Last() == enemyManager.Enemy[gameDirector.RoundCnt])
         {
             roundText.SetActive(true);
 

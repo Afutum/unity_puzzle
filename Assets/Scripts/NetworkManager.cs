@@ -183,4 +183,58 @@ public class NetworkManager : MonoBehaviour
         // 読み込んだかどうか
         return true;
     }
+
+    public IEnumerator RegistRaid(int raidId,int bossId,int bossHp,Action<bool> result)
+    {
+        RegistRaidBossRequest requestData = new RegistRaidBossRequest();
+        requestData.Id = raidId;
+        requestData.UserId = this.userID;
+        requestData.BossId = bossId;
+        requestData.Damage = bossHp;
+
+        // サーバーに送信するオブジェクトをJSONに変換
+        string json = JsonConvert.SerializeObject(requestData);
+        // 送信
+        UnityWebRequest request =
+            UnityWebRequest.Post(API_BASE_URL + "raids/raidBossHpUpdate", json, "application/json");
+
+        // 結果を受信するまで待機
+        yield return request.SendWebRequest();
+
+        bool isSuccess = false;
+        if (request.result == UnityWebRequest.Result.Success
+            && request.responseCode == 200)
+        {
+            isSuccess = true;
+        }
+
+        result?.Invoke(isSuccess); // ここで呼びだし元のresult処理を呼び出す
+    }
+
+    public IEnumerator GetRaidBosses(Action<RaidBossResponse[]> result)
+    {
+        // レイドボスAPIを実行
+        UnityWebRequest request = UnityWebRequest.Get(API_BASE_URL + "raids/showRaidBoss");
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success
+            && request.responseCode == 200)
+        {
+            // レスポンスボディ(json)の文字列を取得
+            string jsonResult = request.downloadHandler.text;
+            // jsonをデシリアライズ
+            RaidBossResponse[] response = JsonConvert.DeserializeObject<RaidBossResponse[]>(jsonResult);
+
+            result.Invoke(response);
+        }
+        else
+        {
+            result.Invoke(null);
+        }
+    }
+
+    internal IEnumerator RegistRaid(object raidId, object bossId, int v, Action<bool> value)
+    {
+        throw new NotImplementedException();
+    }
 }

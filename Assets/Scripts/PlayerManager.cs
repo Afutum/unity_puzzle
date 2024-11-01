@@ -57,8 +57,6 @@ public class PlayerManager : MonoBehaviour
         hp -= enemAttackPower;
 
         
-
-        Debug.Log(hp);
     }
 
     // UŒ‚—Í‚ÌƒŠƒZƒbƒg
