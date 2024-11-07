@@ -32,9 +32,16 @@ public class StageSelectManager : MonoBehaviour
                 }
             }
 
-            for (int n = 0; n < maxStageId + 1; n++)
+            if (maxStageId == 0)
             {
-                buttons[n].interactable = true;
+                buttons[0].interactable = true;
+            }
+            else
+            {
+                for (int n = 0; n < maxStageId + 1; n++)
+                {
+                    buttons[n].interactable = true;
+                }
             }
         }));
     }

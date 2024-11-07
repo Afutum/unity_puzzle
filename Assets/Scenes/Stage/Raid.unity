@@ -663,7 +663,7 @@ MonoBehaviour:
   - {fileID: 8990675603816014546, guid: 005304dd9945a0c4bacbf39eb6191bfc, type: 3}
   - {fileID: 5462679643149537643, guid: a1735051412bf174f85cbd58b7fc3cbf, type: 3}
   - {fileID: 7025980777666525390, guid: 44956991ccc6486439baf05c10e351b4, type: 3}
-  gameTimer: 31
+  gameTimer: 11
   fieldItemCountMax: 50
   deleteCount: 3
   comboCount: 0
@@ -1892,8 +1892,8 @@ MonoBehaviour:
   enemy: []
   attackSE: {fileID: 8300000, guid: 6898ac86f226a3a43ba97dcf79a71e98, type: 3}
   enemyRandPrefab:
-  - {fileID: 934435532221526063, guid: b9b22e73fc217bf478edbc65059cebaa, type: 3}
   - {fileID: 4982157421225141084, guid: 8ebbc2f35b873324dae5fc811b6eb4da, type: 3}
+  - {fileID: 934435532221526063, guid: b9b22e73fc217bf478edbc65059cebaa, type: 3}
   - {fileID: 2416288188790928983, guid: f201b2a10b13bae408be41d840f5b35d, type: 3}
   - {fileID: 136552756514318938, guid: 3c6e4b342d231a947888e98bae647ae9, type: 3}
   raidId: 0

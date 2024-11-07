@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour
 
     EnemyAnimator[] enemyAnim;
 
-    EnemyHPbar enemyHPbar;
+    protected EnemyHPbar enemyHPbar;
 
     AudioSource audioSource;
 

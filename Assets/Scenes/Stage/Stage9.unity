@@ -1132,10 +1132,10 @@ MonoBehaviour:
   - {fileID: 8990675603816014546, guid: 005304dd9945a0c4bacbf39eb6191bfc, type: 3}
   - {fileID: 5462679643149537643, guid: a1735051412bf174f85cbd58b7fc3cbf, type: 3}
   - {fileID: 7025980777666525390, guid: 44956991ccc6486439baf05c10e351b4, type: 3}
-  gameTimer: 30
   fieldItemCountMax: 50
   deleteCount: 3
   comboCount: 0
+  gameTimer: 30
   isPlayerTurn: 0
   isEnd: 0
   chainSE: {fileID: 8300000, guid: b82447b7fe46d3c459f76b4b3d3c843b, type: 3}
@@ -2960,7 +2960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 2393743711865163414}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 4329416828671448099}
   maxHp: 0
 --- !u!4 &531070074722761056
 Transform:
@@ -4421,7 +4421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 5248692160542158165}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 5442492630790031165}
   maxHp: 0
 --- !u!223 &1746469818464376120
 Canvas:
@@ -5714,7 +5714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 4390712997253885494}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 2702668002393090289}
   maxHp: 0
 --- !u!1 &2675149054086333123
 GameObject:
@@ -6883,7 +6883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 5607000451499862820}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 5653794470695328341}
   maxHp: 0
 --- !u!4 &3638918338872529363
 Transform:
@@ -9403,7 +9403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 7357838415527208102}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 1281559523334869951}
   maxHp: 0
 --- !u!222 &5473999293582414228
 CanvasRenderer:
@@ -12530,7 +12530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 979056583663454899}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 6739433643558729352}
   maxHp: 0
 --- !u!1 &7738122093899440995
 GameObject:

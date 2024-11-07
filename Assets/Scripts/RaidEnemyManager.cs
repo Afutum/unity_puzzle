@@ -13,7 +13,9 @@ public class RaidEnemyManager : EnemyManager
 
     public int raidId = 0;
     public int bossId = 0;
+
     int currentHp = 0;
+    int maxHp = 0;
 
     private void Start()
     {
@@ -24,6 +26,7 @@ public class RaidEnemyManager : EnemyManager
                 raidId = boss[0].Id;
 
                 bossId = boss[0].BossId;
+                maxHp = boss[0].MaxHp;
                 currentHp = boss[0].NowHp;
             }
             else
@@ -36,6 +39,10 @@ public class RaidEnemyManager : EnemyManager
             enemy[0] = Instantiate(enemyRandPrefab[bossId]);
 
             SetStart();
+
+            enemyHPbar.MaxHp(maxHp);
+
+            enemyHPbar.NowHp(currentHp);
         }));
     }
 
@@ -53,10 +60,13 @@ public class RaidEnemyManager : EnemyManager
                 }
                 else
                 {
-                    hp[0] = 3000;
+                    hp[0] = maxHp;
                 }
+
+                enemyHPbar.NowHp(hp[0]);
+
                 bossId = 1;
-                baseDamege[0] = UnityEngine.Random.Range(300, 501);
+                baseDamege[0] = UnityEngine.Random.Range(150, 401);
                 break;
 
             case 1:
@@ -66,10 +76,13 @@ public class RaidEnemyManager : EnemyManager
                 }
                 else
                 {
-                    hp[0] = 3000;
+                    hp[0] = maxHp;
                 }
+
+                enemyHPbar.NowHp(hp[0]);
+
                 bossId = 2;
-                baseDamege[0] = UnityEngine.Random.Range(350, 501);
+                baseDamege[0] = UnityEngine.Random.Range(200, 401);
                 break;
 
             case 2:
@@ -79,10 +92,13 @@ public class RaidEnemyManager : EnemyManager
                 }
                 else
                 {
-                    hp[0] = 3200;
+                    hp[0] = maxHp;
                 }
+
+                enemyHPbar.NowHp(hp[0]);
+
                 bossId = 3;
-                baseDamege[0] = UnityEngine.Random.Range(400, 501);
+                baseDamege[0] = UnityEngine.Random.Range(250, 401);
                 break;
 
             case 3:
@@ -92,10 +108,13 @@ public class RaidEnemyManager : EnemyManager
                 }
                 else
                 {
-                    hp[0] = 3500;
+                    hp[0] = maxHp;
                 }
+
+                enemyHPbar.NowHp(hp[0]);
+
                 bossId = 4;
-                baseDamege[0] = UnityEngine.Random.Range(450, 501);
+                baseDamege[0] = UnityEngine.Random.Range(300, 401);
                 break;
         }
     }

@@ -262,10 +262,10 @@ MonoBehaviour:
   - {fileID: 8990675603816014546, guid: 005304dd9945a0c4bacbf39eb6191bfc, type: 3}
   - {fileID: 5462679643149537643, guid: a1735051412bf174f85cbd58b7fc3cbf, type: 3}
   - {fileID: 7025980777666525390, guid: 44956991ccc6486439baf05c10e351b4, type: 3}
-  gameTimer: 30
   fieldItemCountMax: 50
   deleteCount: 3
   comboCount: 0
+  gameTimer: 30
   isPlayerTurn: 0
   isEnd: 0
   chainSE: {fileID: 8300000, guid: b82447b7fe46d3c459f76b4b3d3c843b, type: 3}
@@ -3004,7 +3004,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 1180500448693649779}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 652677698331953076}
   maxHp: 0
 --- !u!224 &702446109095011930
 RectTransform:
@@ -8878,7 +8878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 1669304381259432334}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 1480785238463262975}
   maxHp: 0
 --- !u!224 &7532851602002253143
 RectTransform:
@@ -10537,7 +10537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 7595813592304905506}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 6190267135791910920}
   maxHp: 0
 --- !u!4 &8945352158924668782
 Transform:

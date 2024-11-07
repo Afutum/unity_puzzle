@@ -1054,10 +1054,10 @@ MonoBehaviour:
   - {fileID: 8990675603816014546, guid: 005304dd9945a0c4bacbf39eb6191bfc, type: 3}
   - {fileID: 5462679643149537643, guid: a1735051412bf174f85cbd58b7fc3cbf, type: 3}
   - {fileID: 7025980777666525390, guid: 44956991ccc6486439baf05c10e351b4, type: 3}
-  gameTimer: 30
   fieldItemCountMax: 50
   deleteCount: 3
   comboCount: 0
+  gameTimer: 30
   isPlayerTurn: 0
   isEnd: 0
   chainSE: {fileID: 8300000, guid: b82447b7fe46d3c459f76b4b3d3c843b, type: 3}
@@ -5353,7 +5353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 4156868368752847741}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 374316500424463959}
   maxHp: 0
 --- !u!1 &3156729710234812435
 GameObject:
@@ -8462,7 +8462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 7181301041519791579}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 1476146764362955458}
   maxHp: 0
 --- !u!224 &5656815708298469929
 RectTransform:
@@ -8870,7 +8870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 5436528286660592659}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 5916975249944134356}
   maxHp: 0
 --- !u!1 &5995421654514835755
 GameObject:
@@ -10756,7 +10756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 1579959435229612736}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 5042955486576883451}
   maxHp: 0
 --- !u!137 &8344002798231584082
 SkinnedMeshRenderer:
@@ -10901,7 +10901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 854406194655819612}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 611703130536281645}
   maxHp: 0
 --- !u!1 &8413883895491053376
 GameObject:

@@ -250,14 +250,12 @@ public class UIManager : MonoBehaviour
         playerTurnText.SetActive(false);
         enemyTurnText.SetActive(false);
         enemyPower.enabled = false;
-        enemyPowerBack.enabled = false;
     }
 
     public void AttackPower()
     {
         // ダメージ数を表示
         power.enabled = true;
-        powerBack.enabled = true;
         power.text = "" + (int)player.Power;
         powerBack.text = "" + (int)player.Power;
 

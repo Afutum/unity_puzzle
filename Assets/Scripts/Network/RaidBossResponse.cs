@@ -16,6 +16,9 @@ public class RaidBossResponse
 
     public int BossId { get; set; }
 
+    [JsonProperty("maxHp")]
+    public int MaxHp { get; set; }
+
     [JsonProperty("nowHp")]
 
     public int NowHp {  get; set; }

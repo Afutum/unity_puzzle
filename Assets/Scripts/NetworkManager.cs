@@ -107,7 +107,7 @@ public class NetworkManager : MonoBehaviour
     public IEnumerator GetStage(Action<StageResponse[]> result)
     {
         // ステージ取得APIを実行
-        UnityWebRequest request = UnityWebRequest.Get(API_BASE_URL + "stages/" + this.userID);
+        UnityWebRequest request = UnityWebRequest.Get(API_BASE_URL + "stages/showStage/" + this.userID);
         yield return request.SendWebRequest();
 
         if(request.result == UnityWebRequest.Result.Success
@@ -231,10 +231,5 @@ public class NetworkManager : MonoBehaviour
         {
             result.Invoke(null);
         }
-    }
-
-    internal IEnumerator RegistRaid(object raidId, object bossId, int v, Action<bool> value)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -11,8 +11,6 @@ public class GameDirector : MonoBehaviour
 {
     // アイテムのプレハブ
     [SerializeField] List<GameObject> prefabBubbles;
-    // ゲーム時間
-    [SerializeField] public float gameTimer;
     // フィールドのアイテム総数
     [SerializeField] int fieldItemCountMax;
     // 削除できるアイテム数
@@ -34,6 +32,10 @@ public class GameDirector : MonoBehaviour
     // ツムツム風
     List<GameObject> lineBubbles;
     LineRenderer lineRenderer;
+
+    // ゲーム時間
+    public float gameTimer = 10;
+    float maxGameTimer = 10;
 
     // プレイヤー・敵のターンかどうか
     public bool isPlayerTurn;
@@ -153,7 +155,7 @@ public class GameDirector : MonoBehaviour
                             if (roundCnt < enemy.Enemy.Length)
                             {
                                 // タイマーを戻す
-                                gameTimer = 30;
+                                gameTimer = maxGameTimer;
 
                                 // 攻撃力の数値を元に戻す
                                 player.ResetPower();
@@ -197,7 +199,7 @@ public class GameDirector : MonoBehaviour
                         }
 
                         // タイマーを戻す
-                        gameTimer = 30;
+                        gameTimer = maxGameTimer;
 
                         // 攻撃力の数値を元に戻す
                         player.ResetPower();
@@ -527,7 +529,7 @@ public class GameDirector : MonoBehaviour
     // 攻守ターンの変更
     public void ChangTurn()
     {
-        gameTimer = 30;
+        gameTimer = maxGameTimer;
 
         if (isPlayerTurn)
         {

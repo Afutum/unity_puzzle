@@ -17,6 +17,7 @@ public class EnemyHPbar : MonoBehaviour
     public int maxHp = 0;
     // åªç›ÇÃHP
     int currentHp;
+
     //public Slider slider;
 
     private void Start()

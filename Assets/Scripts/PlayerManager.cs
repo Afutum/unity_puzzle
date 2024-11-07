@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     // hp
-    int hp = 1000;
+    int hp = 1500;
     public int Hp {  get { return hp; } }
     int divHp;
     public int DivHp { get {  return divHp; } }
@@ -54,9 +54,7 @@ public class PlayerManager : MonoBehaviour
     // プレイヤーのhpを減らす
     public void SubPlayerHp(int enemAttackPower)
     {
-        hp -= enemAttackPower;
-
-        
+        hp -= enemAttackPower;   
     }
 
     // 攻撃力のリセット
